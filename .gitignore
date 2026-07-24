@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+
+# Java / Spring Boot
+backend/target/
+*.class
+*.log
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS / temporary files
+*.tmp
+*.swp
