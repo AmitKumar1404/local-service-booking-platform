@@ -1,5 +1,7 @@
 package com.localfix.controller;
 
+import com.localfix.dto.LoginRequest;
+import com.localfix.dto.LoginResponse;
 import com.localfix.dto.RegisterRequest;
 import com.localfix.dto.RegisterResponse;
 import com.localfix.service.AuthService;
@@ -25,5 +27,13 @@ public class AuthController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequest request) {
+
+        LoginResponse response = authService.login(request);
+
+        return ResponseEntity.ok(response);
     }
 }
