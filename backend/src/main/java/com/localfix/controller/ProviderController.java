@@ -11,7 +11,8 @@ import com.localfix.service.LocalServiceService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import com.localfix.entity.User;
-
+import com.localfix.dto.BookingResponse;
+import com.localfix.service.BookingService;
 import java.util.List;
 
 @RestController
@@ -20,6 +21,8 @@ import java.util.List;
 public class ProviderController {
 
     private final LocalServiceService localServiceService;
+
+    private final BookingService bookingService;
 
     @GetMapping("/test")
     @PreAuthorize("hasRole('PROVIDER')")
@@ -83,5 +86,17 @@ public class ProviderController {
         );
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/bookings")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public List<BookingResponse> getProviderBookings(
+            Authentication authentication) {
+
+        User provider = (User) authentication.getPrincipal();
+
+        return bookingService.getProviderBookings(
+                provider.getId()
+        );
     }
 }
