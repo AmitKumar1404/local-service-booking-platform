@@ -126,4 +126,118 @@ public class BookingServiceImpl implements BookingService {
 
                 .build();
     }
+
+    @Override
+    public BookingResponse acceptBooking(Long bookingId, Long providerId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() ->
+                        new RuntimeException("Booking not found")
+                );
+
+        if (!booking.getProvider().getId().equals(providerId)) {
+            throw new RuntimeException(
+                    "You are not allowed to manage this booking"
+            );
+        }
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new RuntimeException(
+                    "Only pending bookings can be accepted"
+            );
+        }
+
+        booking.setStatus(BookingStatus.ACCEPTED);
+
+        Booking savedBooking = bookingRepository.save(booking);
+
+        return mapToResponse(savedBooking);
+    }
+
+    @Override
+    public BookingResponse rejectBooking(Long bookingId, Long providerId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() ->
+                        new RuntimeException("Booking not found")
+                );
+
+        if (!booking.getProvider().getId().equals(providerId)) {
+            throw new RuntimeException(
+                    "You are not allowed to manage this booking"
+            );
+        }
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new RuntimeException(
+                    "Only pending bookings can be rejected"
+            );
+        }
+
+        booking.setStatus(BookingStatus.REJECTED);
+
+        Booking savedBooking = bookingRepository.save(booking);
+
+        return mapToResponse(savedBooking);
+    }
+
+    @Override
+    public BookingResponse completeBooking(
+            Long bookingId,
+            Long providerId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() ->
+                        new RuntimeException("Booking not found")
+                );
+
+        if (!booking.getProvider().getId().equals(providerId)) {
+            throw new RuntimeException(
+                    "You are not allowed to manage this booking"
+            );
+        }
+
+        if (booking.getStatus() != BookingStatus.ACCEPTED) {
+            throw new RuntimeException(
+                    "Only accepted bookings can be completed"
+            );
+        }
+
+        booking.setStatus(BookingStatus.COMPLETED);
+
+        Booking savedBooking = bookingRepository.save(booking);
+
+        return mapToResponse(savedBooking);
+    }
+
+    @Override
+    public BookingResponse cancelBooking(
+            Long bookingId,
+            Long customerId) {
+
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() ->
+                        new RuntimeException("Booking not found")
+                );
+
+        if (!booking.getCustomer().getId().equals(customerId)) {
+            throw new RuntimeException(
+                    "You are not allowed to cancel this booking"
+            );
+        }
+
+        if (booking.getStatus() != BookingStatus.PENDING
+                && booking.getStatus() != BookingStatus.ACCEPTED) {
+
+            throw new RuntimeException(
+                    "This booking cannot be cancelled"
+            );
+        }
+
+        booking.setStatus(BookingStatus.CANCELLED);
+
+        Booking savedBooking = bookingRepository.save(booking);
+
+        return mapToResponse(savedBooking);
+    }
 }

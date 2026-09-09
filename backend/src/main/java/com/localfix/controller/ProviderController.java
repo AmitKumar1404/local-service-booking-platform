@@ -99,4 +99,48 @@ public class ProviderController {
                 provider.getId()
         );
     }
+
+    @PutMapping("/bookings/{bookingId}/accept")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public BookingResponse acceptBooking(
+            @PathVariable Long bookingId,
+            Authentication authentication) {
+
+        User provider = (User) authentication.getPrincipal();
+
+        return bookingService.acceptBooking(
+                bookingId,
+                provider.getId()
+        );
+    }
+
+    @PutMapping("/bookings/{bookingId}/reject")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public BookingResponse rejectBooking(
+            @PathVariable Long bookingId,
+            Authentication authentication) {
+
+        User provider = (User) authentication.getPrincipal();
+
+        return bookingService.rejectBooking(
+                bookingId,
+                provider.getId()
+        );
+    }
+
+    @PutMapping("/bookings/{bookingId}/complete")
+    @PreAuthorize("hasRole('PROVIDER')")
+    public BookingResponse completeBooking(
+            @PathVariable Long bookingId,
+            Authentication authentication) {
+
+        User provider = (User) authentication.getPrincipal();
+
+        return bookingService.completeBooking(
+                bookingId,
+                provider.getId()
+        );
+    }
+
+
 }

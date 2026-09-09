@@ -20,4 +20,12 @@ public interface BookingService {
             Long bookingId,
             Long userId
     );
+
+    BookingResponse acceptBooking(Long bookingId, Long providerId);
+
+    BookingResponse rejectBooking(Long bookingId, Long providerId);
+
+    BookingResponse completeBooking(Long bookingId, Long providerId);
+
+    BookingResponse cancelBooking(Long bookingId, Long customerId);
 }

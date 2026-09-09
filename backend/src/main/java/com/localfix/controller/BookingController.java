@@ -57,4 +57,18 @@ public class BookingController {
                 user.getId()
         );
     }
+
+    @PutMapping("/{bookingId}/cancel")
+    @PreAuthorize("hasRole('CUSTOMER')")
+    public BookingResponse cancelBooking(
+            @PathVariable Long bookingId,
+            Authentication authentication) {
+
+        User customer = (User) authentication.getPrincipal();
+
+        return bookingService.cancelBooking(
+                bookingId,
+                customer.getId()
+        );
+    }
 }
